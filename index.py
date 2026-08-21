@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 from youtube_transcript_api import YouTubeTranscriptApi
-from text_splitter import RecursiveCharacterTextSplitter
-from langchain_core.document_loaders import YoutubeLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import PromptTemplate
 
 
@@ -17,7 +16,7 @@ try:
         snippet.text for snippet in transcript
     )
 
-    print(transcript_text)
+    #print(transcript_text)
 
 except Exception as e:
     print(f"An error occurred: {e}")
@@ -29,4 +28,7 @@ splitter = RecursiveCharacterTextSplitter(
 )
 
 chunks = splitter.create_documents([transcript_text])
+
+size=len(chunks)  # Print the number of chunks created
+print(f"Number of chunks created: {size}")
 
