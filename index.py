@@ -3,7 +3,9 @@ load_dotenv()  # Load environment variables from .env file
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import PromptTemplate
-
+from langchain_chroma import Chroma
+from langchain_core.documents import Document
+from langchain_huggingface import HuggingFaceEmbeddings
 
 videoId="LPZh9BOjkQs"  # Replace with your actual video ID
 
@@ -31,4 +33,20 @@ chunks = splitter.create_documents([transcript_text])
 
 size=len(chunks)  # Print the number of chunks created
 print(f"Number of chunks created: {size}")
+
+#create embedding model
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+#vector store and store embeddings
+vector_store = Chroma.from_documents(
+    documents=chunks,
+    embedding=embeddings,
+    collection_name="rag_collection",
+    persist_directory="./chroma_db"
+)
+
+
+
 
