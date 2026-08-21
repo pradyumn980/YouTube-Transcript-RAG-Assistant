@@ -6,8 +6,12 @@ from langchain_core.prompts import PromptTemplate
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint
+import os
 
-videoId="LPZh9BOjkQs"  # Replace with your actual video ID
+load_dotenv()  # Load environment variables from .env file
+
+videoId="PHpsdIHpLUE"  # Replace with your actual video ID
 
 try:
     ytt_api = YouTubeTranscriptApi()
@@ -47,6 +51,31 @@ vector_store = Chroma.from_documents(
     persist_directory="./chroma_db"
 )
 
+#reteriver created
+retriever = vector_store.as_retriever(search_type="similarity",search_kwargs={"k": 2})
 
+result=retriever.invoke("summary of this video in 2 lines")
+print(result)
 
+prompt=PromptTemplate(
+    template='You are a helpful assistant. Answer only from the provided transcript. If the answer is not present in the transcript, say "I am sorry, I cannot find the answer in the transcript." Provide the answer in 2 lines. \n\nTranscript: {text}\n\nQuestion: {topic}\n\nAnswer:',  
+    input_variables=['topic', 'text']
+)
 
+llm = HuggingFaceEndpoint(
+        repo_id="Qwen/Qwen2.5-7B-Instruct-1M",
+    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
+    max_new_tokens=512,
+    temperature=0.7
+)
+print("Token loaded:", os.getenv("HF_TOKEN") is not None)
+model=ChatHuggingFace(llm=llm)
+
+question="is the topic alien sightings discussed in this video?"
+reteriver_result=retriever.invoke(question)
+
+context_text=" ".join([doc.page_content for doc in reteriver_result])
+final_result=prompt.invoke({'topic':question,'text':context_text})
+
+answer=model.invoke(final_result)
+print(answer)
