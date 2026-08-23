@@ -63,7 +63,7 @@ prompt=PromptTemplate(
 )
 
 llm = HuggingFaceEndpoint(
-        repo_id="Qwen/Qwen2.5-7B-Instruct-1M",
+        repo_id="meta-llama/Llama-3.1-8B-Instruct",
     huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
     max_new_tokens=512,
     temperature=0.7
@@ -78,4 +78,4 @@ context_text=" ".join([doc.page_content for doc in reteriver_result])
 final_result=prompt.invoke({'topic':question,'text':context_text})
 
 answer=model.invoke(final_result)
-print(answer)
+print(answer.content)
