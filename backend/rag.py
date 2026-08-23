@@ -63,17 +63,19 @@ model = ChatHuggingFace(
 
 prompt = PromptTemplate(
     template="""
-You are a helpful assistant.
+You are a helpful assistant answering questions about a YouTube video.
 
-Answer only from the provided transcript.
+Use ONLY the information provided in the context below.
 
-If the answer is not present in the transcript, say:
+Rules:
+1. Answer the question using the context.
+2. If the context contains relevant information, explain it clearly.
+3. Do not use outside knowledge.
+4. If the context does not contain enough information to answer,
+   say exactly:
+   "I could not find enough information about this in the video."
 
-"I am sorry, I cannot find the answer in the transcript."
-
-Provide the answer in 2 lines.
-
-Transcript:
+Context:
 {text}
 
 Question:
