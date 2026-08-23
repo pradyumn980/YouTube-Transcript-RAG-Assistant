@@ -152,7 +152,7 @@ def analyze_video(url):
 
     transcript = ytt_api.fetch(
         video_id,
-        languages=["en"]
+        languages=["en","hi"]
     )
 
 

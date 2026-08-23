@@ -39,7 +39,10 @@ function App() {
       }
 
       const data = await response.json();
-      setVideo(data);
+
+console.log("BACKEND RESPONSE:", data);
+
+setVideo(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -201,7 +204,7 @@ function App() {
 
               <div className="mt-6 space-y-4">
                 <InfoCard
-                  icon={<Youtube size={18} />}
+                  icon={<Play size={18} />}
                   title="Transcript"
                   value="Loaded"
                 />

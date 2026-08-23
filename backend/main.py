@@ -10,6 +10,7 @@ from rag import (
 )
 
 
+
 # =========================================================
 # CREATE FASTAPI APP
 # =========================================================
@@ -19,6 +20,11 @@ app = FastAPI(
     description="RAG based YouTube question answering API",
     version="1.0.0"
 )
+@app.get("/")
+def root():
+    return {
+        "message": "YouTube RAG API is running"
+    }
 
 
 # =========================================================
