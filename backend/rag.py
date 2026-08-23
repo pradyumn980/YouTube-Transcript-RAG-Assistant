@@ -18,12 +18,11 @@ from langchain_huggingface import (
     HuggingFaceEndpoint,
 )
 
-
 # =========================================================
 # ENVIRONMENT
 # =========================================================
 
-HF_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 print("Token loaded:", HF_TOKEN is not None)
 
