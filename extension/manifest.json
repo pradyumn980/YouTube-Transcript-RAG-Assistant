@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube RAG",
+  "version": "1.0.0",
+  "description": "Ask questions about YouTube videos using Retrieval Augmented Generation.",
+  "permissions": [
+    "sidePanel",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ],
+  "action": {
+    "default_title": "YouTube RAG"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  }
+}

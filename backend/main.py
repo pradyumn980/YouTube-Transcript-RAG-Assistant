@@ -9,8 +9,6 @@ from rag import (
     ask_question
 )
 
-
-
 # =========================================================
 # CREATE FASTAPI APP
 # =========================================================
@@ -27,9 +25,6 @@ def root():
     }
 
 
-# =========================================================
-# CORS
-# =========================================================
 
 app.add_middleware(
 
@@ -40,9 +35,7 @@ app.add_middleware(
     ],
 
     allow_credentials=True,
-
     allow_methods=["*"],
-
     allow_headers=["*"],
 )
 
@@ -52,14 +45,11 @@ app.add_middleware(
 # =========================================================
 
 class VideoRequest(BaseModel):
-
     url: str
 
 
 class QuestionRequest(BaseModel):
-
     video_id: str
-
     question: str
 
 
@@ -73,7 +63,6 @@ def home():
     return {
         "message": "YouTube RAG API is running"
     }
-
 
 # =========================================================
 # ANALYZE VIDEO
@@ -90,30 +79,21 @@ def analyze_video_api(
             request.url
         )
 
-
         return {
 
             "video_id": result["video_id"],
-
             "chunks": result["chunks"],
-
             "title": "YouTube Video"
-
         }
 
-
     except Exception as e:
-
         print(
             "Analyze error:",
             str(e)
         )
 
-
         raise HTTPException(
-
             status_code=400,
-
             detail=str(e)
         )
 
@@ -130,22 +110,16 @@ def ask_question_api(
     try:
 
         answer = ask_question(
-
             request.video_id,
-
             request.question
         )
 
-
         return {
-
             "answer": answer
-
         }
 
 
     except Exception as e:
-
         print(
             "Question error:",
             str(e)
@@ -153,8 +127,6 @@ def ask_question_api(
 
 
         raise HTTPException(
-
             status_code=400,
-
             detail=str(e)
         )
