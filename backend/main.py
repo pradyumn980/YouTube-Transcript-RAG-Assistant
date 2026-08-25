@@ -24,8 +24,6 @@ def root():
         "message": "YouTube RAG API is running"
     }
 
-
-
 app.add_middleware(
 
     CORSMiddleware,
