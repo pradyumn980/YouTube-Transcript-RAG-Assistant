@@ -29,7 +29,7 @@ A Retrieval-Augmented Generation (RAG) pipeline built with Python and LangChain 
 [ HuggingFace Embeddings ] ──▶ Vector Embeddings
          │
          ▼
-[ ChromaDB Vector Store ] (Saved locally in ./chroma_db)
+[ ChromaDB Vector Store ] (Saved in ./chroma_db)
          │
          ▼
 [ User Query ] ──▶ [ Similarity Search Retriever ] ──▶ Context Chunks
