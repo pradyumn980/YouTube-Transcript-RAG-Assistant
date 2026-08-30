@@ -26,7 +26,7 @@ function App() {
     setAnswer("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/video/analyze", {
+      const response = await fetch("https://youtube-transcript-rag-assistant.onrender.com/api/video/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ setVideo(data);
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/video/ask", {
+      const response = await fetch("https://youtube-transcript-rag-assistant.onrender.com/api/video/ask", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
