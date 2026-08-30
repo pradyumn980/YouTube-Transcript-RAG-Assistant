@@ -33,28 +33,35 @@ if not HF_TOKEN:
 
 
 # =========================================================
-# EMBEDDING MODEL
+# LAZY-LOADED MODELS (prevents OOM on Render at startup)
 # =========================================================
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
+_embeddings = None
+_model = None
 
 
-# =========================================================
-# LLM
-# =========================================================
+def get_embeddings():
+    global _embeddings
+    if _embeddings is None:
+        print("Loading embedding model...")
+        _embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+    return _embeddings
 
-llm = HuggingFaceEndpoint(
-    repo_id="meta-llama/Llama-3.1-8B-Instruct",
-    huggingfacehub_api_token=HF_TOKEN,
-    max_new_tokens=512,
-    temperature=0.7,
-)
 
-model = ChatHuggingFace(
-    llm=llm
-)
+def get_model():
+    global _model
+    if _model is None:
+        print("Loading LLM...")
+        llm = HuggingFaceEndpoint(
+            repo_id="meta-llama/Llama-3.1-8B-Instruct",
+            huggingfacehub_api_token=HF_TOKEN,
+            max_new_tokens=512,
+            temperature=0.7,
+        )
+        _model = ChatHuggingFace(llm=llm)
+    return _model
 
 
 # =========================================================
@@ -212,7 +219,7 @@ def analyze_video(url):
 
         documents=chunks,
 
-        embedding=embeddings,
+        embedding=get_embeddings(),
 
         collection_name=collection_name,
 
@@ -266,7 +273,7 @@ def ask_question(
 
         collection_name=collection_name,
 
-        embedding_function=embeddings,
+        embedding_function=get_embeddings(),
 
         persist_directory="./chroma_db"
     )
@@ -328,7 +335,7 @@ def ask_question(
     # Generate answer
     # -----------------------------------------
 
-    answer = model.invoke(
+    answer = get_model().invoke(
         final_result
     )
 

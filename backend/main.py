@@ -1,13 +1,11 @@
+import os
+
 from fastapi import FastAPI, HTTPException
 
 from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel
 
-from rag import (
-    analyze_video,
-    ask_question
-)
 
 # =========================================================
 # CREATE FASTAPI APP
@@ -18,18 +16,14 @@ app = FastAPI(
     description="RAG based YouTube question answering API",
     version="1.0.0"
 )
-@app.get("/")
-def root():
-    return {
-        "message": "YouTube RAG API is running"
-    }
 
 app.add_middleware(
 
     CORSMiddleware,
 
     allow_origins=[
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "*"
     ],
 
     allow_credentials=True,
@@ -72,6 +66,8 @@ def analyze_video_api(
 ):
 
     try:
+        # Lazy import to avoid loading heavy ML models at startup
+        from rag import analyze_video
 
         result = analyze_video(
             request.url
@@ -106,6 +102,8 @@ def ask_question_api(
 ):
 
     try:
+        # Lazy import to avoid loading heavy ML models at startup
+        from rag import ask_question
 
         answer = ask_question(
             request.video_id,
@@ -128,3 +126,13 @@ def ask_question_api(
             status_code=400,
             detail=str(e)
         )
+
+
+# =========================================================
+# RUN WITH UVICORN
+# =========================================================
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
